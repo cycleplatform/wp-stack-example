@@ -59,7 +59,7 @@
         "network": {
           "public": "enable",
           "hostname": "wordpress",
-          "ports": ["80:80" 
+          "ports": ["80:80"]
         },
         "deploy": {
           "instances": 1
