@@ -1,0 +1,86 @@
+{
+  "version": "1.0",
+  "containers": {
+    "db": {
+      "name": "db",
+      "image": {
+        "name": "db",
+        "origin": {
+          "type": "docker-hub",
+          "details": {
+            "target": "mysql:5.7"
+          }
+        }
+      },
+      "stateful": true,
+
+      "config": {
+        "network": {
+          "public": "disable",
+          "hostname": "db",
+          "ports": ["3306:3306"]
+        },
+        "deploy": {
+          "instances": 1
+        },
+        "runtime": {
+          "environment_vars": {
+            "MYSQL_ROOT_PASSWORD": "password",
+            "MYSQL_DATABASE": "wordpress",
+            "MYSQL_USER": "wordpress",
+            "MYSQL_PASSWORD": "password"
+          }
+        }
+      },
+      "volumes": [
+        {
+          "local": {
+            "max_size": "20G"
+          },
+          "destination": "/var/lib/mysql"
+        }
+      ]
+    },
+
+    "wordpress": {
+      "name": "wordpress",
+      "image": {
+        "name": "wordpress",
+        "origin": {
+          "type": "docker-hub",
+          "details": {
+            "target": "wordpress:latest"
+          }
+        }
+      },
+      "stateful": true,
+
+      "config": {
+        "network": {
+          "public": "enable",
+          "hostname": "wordpress",
+          "ports": ["80:80" 
+        },
+        "deploy": {
+          "instances": 1
+        },
+        "runtime": {
+          "environment_vars": {
+            "WORDPRESS_DB_USER": "wordpress",
+            "WORDPRESS_DB_HOST": "db",
+            "WORDPRESS_DB_PASSWORD": "password",
+            "WORDPRESS_DB_NAME": "wordpress"
+          }
+        }
+      },
+      "volumes": [
+        {
+          "local": {
+            "max_size": "20G"
+          },
+          "destination": "/var/www/html"
+        }
+      ]
+    }
+  }
+}
